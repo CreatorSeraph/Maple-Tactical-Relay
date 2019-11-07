@@ -45,7 +45,7 @@ int main()
 
     int 총점 = 0;
 
-    for(int 날짜 = 7; 날짜 <= 20; ++날짜)
+    for (int 날짜 = 7; 날짜 <= 20; ++날짜)
     {
         if constexpr (dailyCheck)
         {
@@ -76,11 +76,13 @@ int main()
 
         auto 복사된_저장소 = 이름_저장소;
         int 현재_캐릭터_개수 = 캐릭터개수;
-        auto pop = [&복사된_저장소, &현재_캐릭터_개수](int job)
+        int 점수 = 450;
+        auto pop = [&복사된_저장소, &현재_캐릭터_개수, &점수](int job)
         {
             wstring result = 복사된_저장소[job].front();
             복사된_저장소[job].pop_front();
             --현재_캐릭터_개수;
+            점수 += 30;
             return result;
         };
 
@@ -96,7 +98,6 @@ int main()
             L"아케인300",
         };
 
-        int 점수 = 450;
         array<wstring, 9> 필요_캐릭터;
         int i;
         //직업조건, 레벨조건 만족하는 캐릭터
@@ -105,19 +106,17 @@ int main()
             auto 필요_직업 = (날짜 + i) % 5;
 
             if (!복사된_저장소[필요_직업].empty())
-            {
                 필요_캐릭터[i] = pop(필요_직업);
-            }
             else if ((필요_직업 == 도적 || 필요_직업 == 해적) && !복사된_저장소[제논].empty())
                 필요_캐릭터[i] = pop(제논);
         }
-        
+
         list<wstring> 남은_캐릭터;
         for (auto& iter : 복사된_저장소)
         {
             남은_캐릭터.splice(남은_캐릭터.begin(), iter);
         }
-        
+
         //레벨 조건 만족하는 캐릭터
         for (i = 8; i >= 0 && !남은_캐릭터.empty(); --i)
         {
@@ -127,13 +126,11 @@ int main()
                 남은_캐릭터.pop_front();
                 점수 += 20;
             }
-            else
-                점수 += 30;
         }
 
         while (i >= 0)
         {
-            if(필요_캐릭터[i].empty())
+            if (필요_캐릭터[i].empty())
             {
                 필요_캐릭터[i] = 직업_문자열[(날짜 + i) % 5];
                 점수 += 10;

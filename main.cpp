@@ -25,6 +25,7 @@ int main()
     array <list<wstring>, 직업_개수 > 이름_저장소;
     array<wstring, 직업_개수> 직업_문자열 = { L"궁수" ,L"도적", L"해적", L"전사", L"법사", L"제논" };
     wstring 입력저장용;
+    int 캐릭터개수 = 0;
 
     wcout << L"앞으로 나오는 직업군의 200레벨 이상 캐릭터 이름을 입력해주세요 (없으면 0 입력)" << endl;
 
@@ -38,6 +39,7 @@ int main()
             if (입력저장용 == L"0")
                 break;
             이름_저장소[i].push_back(std::move(입력저장용));
+            ++캐릭터개수;
         }
     }
 
@@ -73,10 +75,12 @@ int main()
         }
 
         auto 복사된_저장소 = 이름_저장소;
-        auto pop = [&복사된_저장소](int job)
+        int 현재_캐릭터_개수 = 캐릭터개수;
+        auto pop = [&복사된_저장소, &현재_캐릭터_개수](int job)
         {
             wstring result = 복사된_저장소[job].front();
             복사된_저장소[job].pop_front();
+            --현재_캐릭터_개수;
             return result;
         };
 
@@ -96,12 +100,14 @@ int main()
         array<wstring, 9> 필요_캐릭터;
         int i;
         //직업조건, 레벨조건 만족하는 캐릭터
-        for (i = 8; i >= 0; --i)
+        for (i = 8; i >= 0 && 현재_캐릭터_개수 > 1; --i)
         {
             auto 필요_직업 = (날짜 + i) % 5;
 
             if (!복사된_저장소[필요_직업].empty())
+            {
                 필요_캐릭터[i] = pop(필요_직업);
+            }
             else if ((필요_직업 == 도적 || 필요_직업 == 해적) && !복사된_저장소[제논].empty())
                 필요_캐릭터[i] = pop(제논);
         }

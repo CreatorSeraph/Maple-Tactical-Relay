@@ -8,6 +8,7 @@
 #include <string>
 #include <array>
 #include <list>
+#include <Windows.h>
 
 enum 직업
 {
@@ -158,4 +159,6 @@ int main()
             wcout << L"\t총점 : " << 총점 << endl;
         }
     }
+
+    system("pause");
 }
